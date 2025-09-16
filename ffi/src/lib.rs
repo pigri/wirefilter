@@ -18,8 +18,9 @@ use std::{
     net::IpAddr,
 };
 use wirefilter::{
-    AllFunction, AlwaysList, AnyFunction, CIDRFunction, ConcatFunction, GetType, LenFunction,
-    LowerFunction, NeverList, StartsWithFunction, Type, WildcardReplaceFunction, catch_panic,
+    AllFunction, AlwaysList, AnyFunction, CIDRFunction, ConcatFunction, DecodeBase64Function,
+    GetType, LenFunction, LowerFunction, NeverList, StartsWithFunction, Type,
+    WildcardReplaceFunction, catch_panic,
 };
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -378,13 +379,20 @@ pub extern "C" fn wirefilter_add_function_to_scheme(
                 }
             };
         }
+        "decode_base64" => {
+            return match builder.add_function(name, DecodeBase64Function::default()) {
+                Ok(_) => true,
+                Err(err) => {
+                    write_last_error!("{}", err);
+                    false
+                }
+            };
+        }
         _ => {
             write_last_error!("Unknown function name provided: {}", name);
             return false;
         }
     };
-
-    // Call the original Rust method. This should now compile correctly.
 }
 
 #[unsafe(no_mangle)]
