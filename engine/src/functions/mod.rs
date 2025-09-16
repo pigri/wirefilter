@@ -4,6 +4,7 @@ pub(crate) mod cidr;
 pub(crate) mod concat;
 pub(crate) mod len;
 pub(crate) mod lower;
+pub(crate) mod remove_bytes;
 pub(crate) mod starts_with;
 pub(crate) mod wildcard_replace;
 
@@ -18,6 +19,7 @@ pub use cidr::CIDRFunction;
 pub use concat::ConcatFunction;
 pub use len::LenFunction;
 pub use lower::LowerFunction;
+pub use remove_bytes::RemoveBytesFunction;
 pub use starts_with::StartsWithFunction;
 use std::any::Any;
 use std::convert::TryFrom;
