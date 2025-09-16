@@ -98,9 +98,9 @@ pub use self::{
     functions::{
         AllFunction, AnyFunction, CIDRFunction, ConcatFunction, FunctionArgInvalidConstantError,
         FunctionArgKind, FunctionArgKindMismatchError, FunctionArgs, FunctionDefinition,
-        FunctionDefinitionContext, FunctionParam, FunctionParamError, LenFunction, LowerFunction,
-        SimpleFunctionDefinition, SimpleFunctionImpl, SimpleFunctionOptParam, SimpleFunctionParam,
-        StartsWithFunction, WildcardReplaceFunction,
+        FunctionDefinitionContext, FunctionParam, FunctionParamError, JsonLookupIntegerFunction,
+        LenFunction, LowerFunction, SimpleFunctionDefinition, SimpleFunctionImpl,
+        SimpleFunctionOptParam, SimpleFunctionParam, StartsWithFunction, WildcardReplaceFunction,
     },
     lex::LexErrorKind,
     lhs_types::{Array, Map, MapIter, TypedArray, TypedMap},
