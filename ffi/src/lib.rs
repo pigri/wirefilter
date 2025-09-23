@@ -19,8 +19,9 @@ use std::{
 };
 use wirefilter::{
     AllFunction, AlwaysList, AnyFunction, CIDRFunction, ConcatFunction, EndsWithFunction, GetType,
-    LenFunction, LowerFunction, NeverList, StartsWithFunction, Type, WildcardReplaceFunction,
-    catch_panic,
+    JsonLookupIntegerFunction, JsonLookupStringFunction, LenFunction, LowerFunction, NeverList,
+    RemoveBytesFunction, RemoveQueryArgsFunction, StartsWithFunction, SubstringFunction,
+    ToStringFunction, Type, WildcardReplaceFunction, catch_panic,
 };
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -381,6 +382,60 @@ pub extern "C" fn wirefilter_add_function_to_scheme(
         }
         "ends_with" => {
             return match builder.add_function(name, EndsWithFunction::default()) {
+                Ok(_) => true,
+                Err(err) => {
+                    write_last_error!("{}", err);
+                    false
+                }
+            };
+        }
+        "json_lookup_integer" => {
+            return match builder.add_function(name, JsonLookupIntegerFunction::default()) {
+                Ok(_) => true,
+                Err(err) => {
+                    write_last_error!("{}", err);
+                    false
+                }
+            };
+        }
+        "json_lookup_string" => {
+            return match builder.add_function(name, JsonLookupStringFunction::default()) {
+                Ok(_) => true,
+                Err(err) => {
+                    write_last_error!("{}", err);
+                    false
+                }
+            };
+        }
+        "remove_bytes" => {
+            return match builder.add_function(name, RemoveBytesFunction::default()) {
+                Ok(_) => true,
+                Err(err) => {
+                    write_last_error!("{}", err);
+                    false
+                }
+            };
+        }
+        "remove_query_args" => {
+            return match builder.add_function(name, RemoveQueryArgsFunction::default()) {
+                Ok(_) => true,
+                Err(err) => {
+                    write_last_error!("{}", err);
+                    false
+                }
+            };
+        }
+        "substring" => {
+            return match builder.add_function(name, SubstringFunction::default()) {
+                Ok(_) => true,
+                Err(err) => {
+                    write_last_error!("{}", err);
+                    false
+                }
+            };
+        }
+        "to_string" => {
+            return match builder.add_function(name, ToStringFunction::default()) {
                 Ok(_) => true,
                 Err(err) => {
                     write_last_error!("{}", err);
