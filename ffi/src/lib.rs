@@ -308,165 +308,37 @@ pub extern "C" fn wirefilter_add_function_to_scheme(
 ) -> bool {
     let name = to_str!(name_ptr, name_len);
 
-    match name {
-        "concat" => {
-            return match builder.add_function(name, ConcatFunction::default()) {
-                Ok(_) => true,
-                Err(err) => {
-                    write_last_error!("{}", err);
-                    false
-                }
-            };
-        }
-        "any" => {
-            return match builder.add_function(name, AnyFunction::default()) {
-                Ok(_) => true,
-                Err(err) => {
-                    write_last_error!("{}", err);
-                    false
-                }
-            };
-        }
-        "all" => {
-            return match builder.add_function(name, AllFunction::default()) {
-                Ok(_) => true,
-                Err(err) => {
-                    write_last_error!("{}", err);
-                    false
-                }
-            };
-        }
-        "lower" => {
-            return match builder.add_function(name, LowerFunction::default()) {
-                Ok(_) => true,
-                Err(err) => {
-                    write_last_error!("{}", err);
-                    false
-                }
-            };
-        }
-        "starts_with" => {
-            return match builder.add_function(name, StartsWithFunction::default()) {
-                Ok(_) => true,
-                Err(err) => {
-                    write_last_error!("{}", err);
-                    false
-                }
-            };
-        }
-        "cidr" => {
-            return match builder.add_function(name, CIDRFunction::default()) {
-                Ok(_) => true,
-                Err(err) => {
-                    write_last_error!("{}", err);
-                    false
-                }
-            };
-        }
-        "len" => {
-            return match builder.add_function(name, LenFunction::default()) {
-                Ok(_) => true,
-                Err(err) => {
-                    write_last_error!("{}", err);
-                    false
-                }
-            };
-        }
-        "wildcard_replace" => {
-            return match builder.add_function(name, WildcardReplaceFunction::default()) {
-                Ok(_) => true,
-                Err(err) => {
-                    write_last_error!("{}", err);
-                    false
-                }
-            };
-        }
-        "url_decode" => {
-            return match builder.add_function(name, UrlDecodeFunction::default()) {
-                Ok(_) => true,
-                Err(err) => {
-                    write_last_error!("{}", err);
-                    false
-                }
-            };
-        }
-        "decode_base64" => {
-            return match builder.add_function(name, DecodeBase64Function::default()) {
-                Ok(_) => true,
-                Err(err) => {
-                    write_last_error!("{}", err);
-                    false
-                }
-            };
-        }
-        "ends_with" => {
-            return match builder.add_function(name, EndsWithFunction::default()) {
-                Ok(_) => true,
-                Err(err) => {
-                    write_last_error!("{}", err);
-                    false
-                }
-            };
-        }
-        "json_lookup_integer" => {
-            return match builder.add_function(name, JsonLookupIntegerFunction::default()) {
-                Ok(_) => true,
-                Err(err) => {
-                    write_last_error!("{}", err);
-                    false
-                }
-            };
-        }
-        "json_lookup_string" => {
-            return match builder.add_function(name, JsonLookupStringFunction::default()) {
-                Ok(_) => true,
-                Err(err) => {
-                    write_last_error!("{}", err);
-                    false
-                }
-            };
-        }
-        "remove_bytes" => {
-            return match builder.add_function(name, RemoveBytesFunction::default()) {
-                Ok(_) => true,
-                Err(err) => {
-                    write_last_error!("{}", err);
-                    false
-                }
-            };
-        }
-        "remove_query_args" => {
-            return match builder.add_function(name, RemoveQueryArgsFunction::default()) {
-                Ok(_) => true,
-                Err(err) => {
-                    write_last_error!("{}", err);
-                    false
-                }
-            };
-        }
-        "substring" => {
-            return match builder.add_function(name, SubstringFunction::default()) {
-                Ok(_) => true,
-                Err(err) => {
-                    write_last_error!("{}", err);
-                    false
-                }
-            };
-        }
-        "to_string" => {
-            return match builder.add_function(name, ToStringFunction::default()) {
-                Ok(_) => true,
-                Err(err) => {
-                    write_last_error!("{}", err);
-                    false
-                }
-            };
-        }
+    let result = match name {
+        "concat" => builder.add_function(name, ConcatFunction::default()),
+        "any" => builder.add_function(name, AnyFunction::default()),
+        "all" => builder.add_function(name, AllFunction::default()),
+        "lower" => builder.add_function(name, LowerFunction::default()),
+        "starts_with" => builder.add_function(name, StartsWithFunction::default()),
+        "cidr" => builder.add_function(name, CIDRFunction::default()),
+        "len" => builder.add_function(name, LenFunction::default()),
+        "wildcard_replace" => builder.add_function(name, WildcardReplaceFunction::default()),
+        "url_decode" => builder.add_function(name, UrlDecodeFunction::default()),
+        "decode_base64" => builder.add_function(name, DecodeBase64Function::default()),
+        "ends_with" => builder.add_function(name, EndsWithFunction::default()),
+        "json_lookup_integer" => builder.add_function(name, JsonLookupIntegerFunction::default()),
+        "json_lookup_string" => builder.add_function(name, JsonLookupStringFunction::default()),
+        "remove_bytes" => builder.add_function(name, RemoveBytesFunction::default()),
+        "remove_query_args" => builder.add_function(name, RemoveQueryArgsFunction::default()),
+        "substring" => builder.add_function(name, SubstringFunction::default()),
+        "to_string" => builder.add_function(name, ToStringFunction::default()),
         _ => {
             write_last_error!("Unknown function name provided: {}", name);
             return false;
         }
     };
+
+    match result {
+        Ok(_) => true,
+        Err(err) => {
+            write_last_error!("{}", err);
+            false
+        }
+    }
 }
 
 #[unsafe(no_mangle)]
