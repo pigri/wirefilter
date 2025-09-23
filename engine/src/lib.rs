@@ -99,7 +99,7 @@ pub use self::{
         AllFunction, AnyFunction, CIDRFunction, ConcatFunction, FunctionArgInvalidConstantError,
         FunctionArgKind, FunctionArgKindMismatchError, FunctionArgs, FunctionDefinition,
         FunctionDefinitionContext, FunctionParam, FunctionParamError, LenFunction, LowerFunction,
-        RemoveQueryArgsFunction, SimpleFunctionDefinition, SimpleFunctionImpl,
+        RemoveBytesFunction, RemoveQueryArgsFunction, SimpleFunctionDefinition, SimpleFunctionImpl,
         SimpleFunctionOptParam, SimpleFunctionParam, StartsWithFunction, SubstringFunction,
         ToStringFunction, WildcardReplaceFunction,
     },
