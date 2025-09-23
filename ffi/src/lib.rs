@@ -21,7 +21,8 @@ use wirefilter::{
     AllFunction, AlwaysList, AnyFunction, CIDRFunction, ConcatFunction, DecodeBase64Function,
     EndsWithFunction, GetType, JsonLookupIntegerFunction, JsonLookupStringFunction, LenFunction,
     LowerFunction, NeverList, RemoveBytesFunction, RemoveQueryArgsFunction, StartsWithFunction,
-    SubstringFunction, ToStringFunction, Type, WildcardReplaceFunction, catch_panic,
+    SubstringFunction, ToStringFunction, Type, UrlDecodeFunction, WildcardReplaceFunction,
+    catch_panic,
 };
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -373,6 +374,15 @@ pub extern "C" fn wirefilter_add_function_to_scheme(
         }
         "wildcard_replace" => {
             return match builder.add_function(name, WildcardReplaceFunction::default()) {
+                Ok(_) => true,
+                Err(err) => {
+                    write_last_error!("{}", err);
+                    false
+                }
+            };
+        }
+        "url_decode" => {
+            return match builder.add_function(name, UrlDecodeFunction::default()) {
                 Ok(_) => true,
                 Err(err) => {
                     write_last_error!("{}", err);
