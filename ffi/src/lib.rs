@@ -19,9 +19,9 @@ use std::{
 };
 use wirefilter::{
     AllFunction, AlwaysList, AnyFunction, CIDRFunction, ConcatFunction, GetType,
-    JsonLookupStringFunction, LenFunction, LowerFunction, NeverList, RemoveBytesFunction,
-    RemoveQueryArgsFunction, StartsWithFunction, SubstringFunction, ToStringFunction, Type,
-    WildcardReplaceFunction, catch_panic,
+    JsonLookupIntegerFunction, JsonLookupStringFunction, LenFunction, LowerFunction, NeverList,
+    RemoveBytesFunction, RemoveQueryArgsFunction, StartsWithFunction, SubstringFunction,
+    ToStringFunction, Type, WildcardReplaceFunction, catch_panic,
 };
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -373,6 +373,15 @@ pub extern "C" fn wirefilter_add_function_to_scheme(
         }
         "wildcard_replace" => {
             return match builder.add_function(name, WildcardReplaceFunction::default()) {
+                Ok(_) => true,
+                Err(err) => {
+                    write_last_error!("{}", err);
+                    false
+                }
+            };
+        }
+        "json_lookup_integer" => {
+            return match builder.add_function(name, JsonLookupIntegerFunction::default()) {
                 Ok(_) => true,
                 Err(err) => {
                     write_last_error!("{}", err);
