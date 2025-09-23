@@ -5,7 +5,10 @@ pub(crate) mod concat;
 pub(crate) mod len;
 pub(crate) mod lower;
 pub(crate) mod remove_bytes;
+pub(crate) mod remove_query_args;
 pub(crate) mod starts_with;
+pub(crate) mod substring;
+pub(crate) mod to_string;
 pub(crate) mod wildcard_replace;
 
 use crate::{
@@ -20,12 +23,15 @@ pub use concat::ConcatFunction;
 pub use len::LenFunction;
 pub use lower::LowerFunction;
 pub use remove_bytes::RemoveBytesFunction;
+pub use remove_query_args::RemoveQueryArgsFunction;
 pub use starts_with::StartsWithFunction;
 use std::any::Any;
 use std::convert::TryFrom;
 use std::fmt::{self, Debug};
 use std::iter::once;
+pub use substring::SubstringFunction;
 use thiserror::Error;
+pub use to_string::ToStringFunction;
 pub use wildcard_replace::WildcardReplaceFunction;
 
 pub(crate) struct ExactSizeChain<A, B>
