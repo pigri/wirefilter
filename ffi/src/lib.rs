@@ -19,7 +19,11 @@ use std::{
 };
 use wirefilter::{
     AllFunction, AlwaysList, AnyFunction, CIDRFunction, ConcatFunction, GetType, LenFunction,
+<<<<<<< HEAD
+    LowerFunction, NeverList, StartsWithFunction, SubstringFunction, Type, WildcardReplaceFunction,
+=======
     LowerFunction, NeverList, StartsWithFunction, ToStringFunction, Type, WildcardReplaceFunction,
+>>>>>>> master
     catch_panic,
 };
 
@@ -372,6 +376,15 @@ pub extern "C" fn wirefilter_add_function_to_scheme(
         }
         "wildcard_replace" => {
             return match builder.add_function(name, WildcardReplaceFunction::default()) {
+                Ok(_) => true,
+                Err(err) => {
+                    write_last_error!("{}", err);
+                    false
+                }
+            };
+        }
+        "substring" => {
+            return match builder.add_function(name, SubstringFunction::default()) {
                 Ok(_) => true,
                 Err(err) => {
                     write_last_error!("{}", err);
