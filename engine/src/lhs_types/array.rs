@@ -100,14 +100,6 @@ impl<'a> Array<'a> {
         }
     }
 
-    /// Creates a new array with the specified capacity
-    pub fn with_capacity(val_type: impl Into<CompoundType>, capacity: usize) -> Self {
-        Self {
-            val_type: val_type.into(),
-            data: InnerArray::Owned(Vec::with_capacity(capacity)),
-        }
-    }
-
     /// Get a reference to an element if it exists
     pub fn get(&self, idx: usize) -> Option<&LhsValue<'a>> {
         self.data.get(idx)
@@ -242,26 +234,13 @@ impl<'a> Array<'a> {
         })
     }
 
-    /// Try extending the array with elements provided by the specified iterator.
-    pub fn try_extend<V, I>(&mut self, iter: I) -> Result<(), TypeMismatchError>
-    where
-        V: Into<LhsValue<'a>>,
-        I: IntoIterator<Item = V>,
-    {
-        let value_type = self.value_type();
-        let vec = self.data.as_vec();
-        for elem in iter {
-            let elem = elem.into();
-            let elem_type = elem.get_type();
-            if value_type != elem_type {
-                return Err(TypeMismatchError {
-                    expected: value_type.into(),
-                    actual: elem_type,
-                });
-            };
-            vec.push(elem);
+    /// Converts the array into a vector.
+    #[inline]
+    pub fn into_vec(self) -> Vec<LhsValue<'a>> {
+        match self.data {
+            InnerArray::Owned(vec) => vec,
+            InnerArray::Borrowed(slice) => slice.iter().map(LhsValue::as_ref).collect(),
         }
-        Ok(())
     }
 }
 
