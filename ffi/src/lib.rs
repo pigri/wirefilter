@@ -21,8 +21,8 @@ use wirefilter::{
     AllFunction, AlwaysList, AnyFunction, CIDRFunction, ConcatFunction, DecodeBase64Function,
     EndsWithFunction, GetType, JsonLookupIntegerFunction, JsonLookupStringFunction, LenFunction,
     LowerFunction, NeverList, RemoveBytesFunction, RemoveQueryArgsFunction, StartsWithFunction,
-    SubstringFunction, ToStringFunction, Type, UrlDecodeFunction, WildcardReplaceFunction,
-    catch_panic,
+    SubstringFunction, ToStringFunction, Type, UpperFunction, UrlDecodeFunction,
+    WildcardReplaceFunction, catch_panic,
 };
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -326,6 +326,7 @@ pub extern "C" fn wirefilter_add_function_to_scheme(
         "remove_query_args" => builder.add_function(name, RemoveQueryArgsFunction::default()),
         "substring" => builder.add_function(name, SubstringFunction::default()),
         "to_string" => builder.add_function(name, ToStringFunction::default()),
+        "upper" => builder.add_function(name, UpperFunction::default()),
         _ => {
             write_last_error!("Unknown function name provided: {}", name);
             return false;

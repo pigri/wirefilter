@@ -13,6 +13,7 @@ pub(crate) mod remove_query_args;
 pub(crate) mod starts_with;
 pub(crate) mod substring;
 pub(crate) mod to_string;
+pub(crate) mod upper;
 pub(crate) mod url_decode;
 pub(crate) mod wildcard_replace;
 
@@ -41,6 +42,7 @@ use std::iter::once;
 pub use substring::SubstringFunction;
 use thiserror::Error;
 pub use to_string::ToStringFunction;
+pub use upper::UpperFunction;
 pub use url_decode::UrlDecodeFunction;
 pub use wildcard_replace::WildcardReplaceFunction;
 

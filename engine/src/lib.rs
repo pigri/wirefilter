@@ -102,7 +102,7 @@ pub use self::{
         FunctionParam, FunctionParamError, JsonLookupIntegerFunction, JsonLookupStringFunction,
         LenFunction, LowerFunction, RemoveBytesFunction, RemoveQueryArgsFunction,
         SimpleFunctionDefinition, SimpleFunctionImpl, SimpleFunctionOptParam, SimpleFunctionParam,
-        StartsWithFunction, SubstringFunction, ToStringFunction, UrlDecodeFunction,
+        StartsWithFunction, SubstringFunction, ToStringFunction, UpperFunction, UrlDecodeFunction,
         WildcardReplaceFunction,
     },
     lex::LexErrorKind,
