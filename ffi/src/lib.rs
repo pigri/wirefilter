@@ -21,7 +21,7 @@ use wirefilter::{
     AllFunction, AlwaysList, AnyFunction, CIDRFunction, ConcatFunction, DecodeBase64Function,
     EndsWithFunction, GetType, JsonLookupIntegerFunction, JsonLookupStringFunction, LenFunction,
     LowerFunction, NeverList, RemoveBytesFunction, RemoveQueryArgsFunction, StartsWithFunction,
-    SubstringFunction, ToStringFunction, Type, UpperFunction, UrlDecodeFunction,
+    SubstringFunction, ToStringFunction, Type, UUID4Function, UpperFunction, UrlDecodeFunction,
     WildcardReplaceFunction, catch_panic,
 };
 
@@ -327,6 +327,7 @@ pub extern "C" fn wirefilter_add_function_to_scheme(
         "substring" => builder.add_function(name, SubstringFunction::default()),
         "to_string" => builder.add_function(name, ToStringFunction::default()),
         "upper" => builder.add_function(name, UpperFunction::default()),
+        "uuid4" => builder.add_function(name, UUID4Function::default()),
         _ => {
             write_last_error!("Unknown function name provided: {}", name);
             return false;
