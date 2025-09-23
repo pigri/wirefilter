@@ -18,10 +18,10 @@ use std::{
     net::IpAddr,
 };
 use wirefilter::{
-    AllFunction, AlwaysList, AnyFunction, CIDRFunction, ConcatFunction, EndsWithFunction, GetType,
-    JsonLookupIntegerFunction, JsonLookupStringFunction, LenFunction, LowerFunction, NeverList,
-    RemoveBytesFunction, RemoveQueryArgsFunction, StartsWithFunction, SubstringFunction,
-    ToStringFunction, Type, WildcardReplaceFunction, catch_panic,
+    AllFunction, AlwaysList, AnyFunction, CIDRFunction, ConcatFunction, DecodeBase64Function,
+    EndsWithFunction, GetType, JsonLookupIntegerFunction, JsonLookupStringFunction, LenFunction,
+    LowerFunction, NeverList, RemoveBytesFunction, RemoveQueryArgsFunction, StartsWithFunction,
+    SubstringFunction, ToStringFunction, Type, WildcardReplaceFunction, catch_panic,
 };
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -380,6 +380,15 @@ pub extern "C" fn wirefilter_add_function_to_scheme(
                 }
             };
         }
+        "decode_base64" => {
+            return match builder.add_function(name, DecodeBase64Function::default()) {
+                Ok(_) => true,
+                Err(err) => {
+                    write_last_error!("{}", err);
+                    false
+                }
+            };
+        }
         "ends_with" => {
             return match builder.add_function(name, EndsWithFunction::default()) {
                 Ok(_) => true,
@@ -448,8 +457,6 @@ pub extern "C" fn wirefilter_add_function_to_scheme(
             return false;
         }
     };
-
-    // Call the original Rust method. This should now compile correctly.
 }
 
 #[unsafe(no_mangle)]
