@@ -19,12 +19,8 @@ use std::{
 };
 use wirefilter::{
     AllFunction, AlwaysList, AnyFunction, CIDRFunction, ConcatFunction, GetType, LenFunction,
-<<<<<<< HEAD
-    LowerFunction, NeverList, StartsWithFunction, SubstringFunction, Type, WildcardReplaceFunction,
-=======
-    LowerFunction, NeverList, StartsWithFunction, ToStringFunction, Type, WildcardReplaceFunction,
->>>>>>> master
-    catch_panic,
+    LowerFunction, NeverList, StartsWithFunction, SubstringFunction, ToStringFunction, Type,
+    WildcardReplaceFunction, catch_panic,
 };
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
