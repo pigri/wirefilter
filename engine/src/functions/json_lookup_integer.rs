@@ -76,20 +76,13 @@ fn json_lookup_integer_impl<'a>(args: FunctionArgs<'_, 'a>) -> Option<LhsValue<'
         }
     };
 
-    if process_key(first_key).is_none() {
-        return None;
-    }
+    process_key(first_key)?;
 
     for arg in args {
-        if process_key(arg).is_none() {
-            return None;
-        }
+        process_key(arg)?;
     }
 
-    match current.as_i64() {
-        Some(i) => Some(LhsValue::Int(i)),
-        None => None,
-    }
+    current.as_i64().map(LhsValue::Int)
 }
 
 impl FunctionDefinition for JsonLookupIntegerFunction {
@@ -102,11 +95,11 @@ impl FunctionDefinition for JsonLookupIntegerFunction {
     ) -> Result<(), super::FunctionParamError> {
         match params.len() {
             0 => {
-                next_param.expect_arg_kind(FunctionArgKind::Field)?;
+                next_param.arg_kind().expect(FunctionArgKind::Field)?;
                 next_param.expect_val_type(iter::once(Type::Bytes.into()))?;
             }
             _ => {
-                next_param.expect_arg_kind(FunctionArgKind::Literal)?;
+                next_param.arg_kind().expect(FunctionArgKind::Literal)?;
                 next_param
                     .expect_val_type(vec![Type::Bytes.into(), Type::Int.into()].into_iter())?;
             }

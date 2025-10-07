@@ -44,10 +44,8 @@ fn len_impl<'a>(args: FunctionArgs<'_, 'a>) -> Option<LhsValue<'a>> {
     }
 
     match arg {
-        Ok(LhsValue::Array(arr)) => {
-            return Some(LhsValue::Int(arr.len() as i64));
-        }
-        Ok(LhsValue::Bytes(bytes)) => return Some(LhsValue::Int(bytes.as_ref().len() as i64)),
+        Ok(LhsValue::Array(arr)) => Some(LhsValue::Int(arr.len() as i64)),
+        Ok(LhsValue::Bytes(bytes)) => Some(LhsValue::Int(bytes.as_ref().len() as i64)),
         Err(Type::Array(_)) | Err(Type::Bytes) => None,
         _ => unreachable!(),
     }
@@ -63,7 +61,9 @@ impl FunctionDefinition for LenFunction {
     ) -> Result<(), super::FunctionParamError> {
         match params.len() {
             0 => {
-                next_param.expect_arg_kind(super::FunctionArgKind::Field)?;
+                next_param
+                    .arg_kind()
+                    .expect(super::FunctionArgKind::Field)?;
                 next_param.expect_val_type(
                     [ExpectedType::Type(Type::Bytes), ExpectedType::Array]
                         .iter()
@@ -111,7 +111,7 @@ mod test {
         let mut args_bytes = vec![Ok(bytes_val)].into_iter();
         assert_eq!(len_impl(&mut args_bytes), Some(LhsValue::Int(5)));
 
-        let arr_val = LhsValue::Array(Array::from_iter([1, 2, 3].into_iter()));
+        let arr_val = LhsValue::Array(Array::from_iter([1, 2, 3]));
         let mut args_array = vec![Ok(arr_val)].into_iter();
         assert_eq!(len_impl(&mut args_array), Some(LhsValue::Int(3)));
 

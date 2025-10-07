@@ -21,7 +21,7 @@ fn remove_query_args_impl<'a>(args: FunctionArgs<'_, 'a>) -> Option<LhsValue<'a>
     let first_param = args.next().expect("expected at least 2 args, got 1");
 
     let mut param_args = vec![first_param];
-    while let Some(arg) = args.next() {
+    for arg in args {
         param_args.push(arg);
     }
 
@@ -76,11 +76,11 @@ impl FunctionDefinition for RemoveQueryArgsFunction {
     ) -> Result<(), super::FunctionParamError> {
         match params.len() {
             0 => {
-                next_param.expect_arg_kind(FunctionArgKind::Field)?;
+                next_param.arg_kind().expect(FunctionArgKind::Field)?;
                 next_param.expect_val_type(std::iter::once(Type::Bytes.into()))?;
             }
             _ => {
-                next_param.expect_arg_kind(FunctionArgKind::Literal)?;
+                next_param.arg_kind().expect(FunctionArgKind::Literal)?;
                 next_param.expect_val_type(std::iter::once(Type::Bytes.into()))?;
             }
         }

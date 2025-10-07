@@ -6,7 +6,7 @@
 //! # Example
 //!
 //! ```
-//! use wirefilter::{ExecutionContext, Scheme, Type};
+//! use wirefilter::{ExecutionContext, Scheme};
 //!
 //! fn main() -> Result<(), Box<dyn std::error::Error>> {
 //!     // Create a map of possible filter fields.
@@ -14,7 +14,8 @@
 //!         http.method: Bytes,
 //!         http.ua: Bytes,
 //!         port: Int,
-//!     }.build();
+//!     }
+//!     .build();
 //!
 //!     // Parse a Wireshark-like expression into an AST.
 //!     let ast = scheme.parse(
@@ -101,9 +102,9 @@ pub use self::{
         FunctionArgKindMismatchError, FunctionArgs, FunctionDefinition, FunctionDefinitionContext,
         FunctionParam, FunctionParamError, JsonLookupIntegerFunction, JsonLookupStringFunction,
         LenFunction, LowerFunction, RemoveBytesFunction, RemoveQueryArgsFunction,
-        SimpleFunctionDefinition, SimpleFunctionImpl, SimpleFunctionOptParam, SimpleFunctionParam,
-        StartsWithFunction, SubstringFunction, ToStringFunction, UUID4Function, UpperFunction,
-        UrlDecodeFunction, WildcardReplaceFunction,
+        SimpleFunctionArgKind, SimpleFunctionDefinition, SimpleFunctionImpl,
+        SimpleFunctionOptParam, SimpleFunctionParam, StartsWithFunction, SubstringFunction,
+        ToStringFunction, UUID4Function, UpperFunction, UrlDecodeFunction, WildcardReplaceFunction,
     },
     lex::LexErrorKind,
     lhs_types::{Array, Map, MapIter, TypedArray, TypedMap},
