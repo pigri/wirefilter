@@ -17,7 +17,13 @@ use std::{
     io::{self, Write},
     net::IpAddr,
 };
-use wirefilter::{AlwaysList, GetType, NeverList, Type, catch_panic};
+use wirefilter::{
+    AllFunction, AlwaysList, AnyFunction, CIDRFunction, ConcatFunction, DecodeBase64Function,
+    EndsWithFunction, GetType, JsonLookupIntegerFunction, JsonLookupStringFunction, LenFunction,
+    LowerFunction, NeverList, RemoveBytesFunction, RemoveQueryArgsFunction, StartsWithFunction,
+    SubstringFunction, ToStringFunction, Type, UUID4Function, UpperFunction, UrlDecodeFunction,
+    WildcardReplaceFunction, catch_panic,
+};
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
 
@@ -285,6 +291,56 @@ macro_rules! to_str {
     ($ptr:ident, $len:ident) => {
         to_str!($ptr, $len, false)
     };
+}
+
+/// Adds a function to the scheme by its name.
+///
+/// @param builder A pointer to the SchemeBuilder.
+/// @param name_ptr A pointer to the start of the UTF-8 encoded name for the function.
+/// @param name_len The length of the name string in bytes.
+/// @return `true` if the function was added successfully, `false` otherwise.
+///         If `false`, check `wirefilter_get_last_error` for details.
+#[unsafe(no_mangle)]
+pub extern "C" fn wirefilter_add_function_to_scheme(
+    builder: &mut SchemeBuilder,
+    name_ptr: *const c_char,
+    name_len: usize,
+) -> bool {
+    let name = to_str!(name_ptr, name_len);
+
+    let result = match name {
+        "concat" => builder.add_function(name, ConcatFunction::default()),
+        "any" => builder.add_function(name, AnyFunction::default()),
+        "all" => builder.add_function(name, AllFunction::default()),
+        "lower" => builder.add_function(name, LowerFunction::default()),
+        "starts_with" => builder.add_function(name, StartsWithFunction::default()),
+        "cidr" => builder.add_function(name, CIDRFunction::default()),
+        "len" => builder.add_function(name, LenFunction::default()),
+        "wildcard_replace" => builder.add_function(name, WildcardReplaceFunction::default()),
+        "url_decode" => builder.add_function(name, UrlDecodeFunction::default()),
+        "decode_base64" => builder.add_function(name, DecodeBase64Function::default()),
+        "ends_with" => builder.add_function(name, EndsWithFunction::default()),
+        "json_lookup_integer" => builder.add_function(name, JsonLookupIntegerFunction::default()),
+        "json_lookup_string" => builder.add_function(name, JsonLookupStringFunction::default()),
+        "remove_bytes" => builder.add_function(name, RemoveBytesFunction::default()),
+        "remove_query_args" => builder.add_function(name, RemoveQueryArgsFunction::default()),
+        "substring" => builder.add_function(name, SubstringFunction::default()),
+        "to_string" => builder.add_function(name, ToStringFunction::default()),
+        "upper" => builder.add_function(name, UpperFunction::default()),
+        "uuid4" => builder.add_function(name, UUID4Function::default()),
+        _ => {
+            write_last_error!("Unknown function name provided: {}", name);
+            return false;
+        }
+    };
+
+    match result {
+        Ok(_) => true,
+        Err(err) => {
+            write_last_error!("{}", err);
+            false
+        }
+    }
 }
 
 #[unsafe(no_mangle)]
